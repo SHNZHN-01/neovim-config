@@ -53,6 +53,13 @@ let
   # Put after the user's PATH, not before: a machine's or project's own
   # versions win (its git and its config, a dev shell's node or go), these
   # only fill in where it has none.
+  #
+  # Everything the config uses comes from here or runtimeDeps, except two
+  # things it can't bring (what's missing for full self-containment):
+  #   opencode   opencode.nvim talks to the opencode on PATH: a separate
+  #              app, installed on its own
+  #   a terminal that can show images (kitty, WezTerm, Ghostty), for
+  #              image.nvim: Neovim runs inside it
   fallbackDeps = [
     ripgrep # Telescope's live grep
     git # git pickers, gitsigns, git-conflict, project_diagnostics
