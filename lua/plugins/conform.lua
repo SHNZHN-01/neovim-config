@@ -7,6 +7,12 @@ require("conform").setup({
 		python = { "ruff_format" },
 		sh = { "shfmt" },
 		bash = { "shfmt" },
+		-- prettierd: Prettier kept running (instant on save). It uses the
+		-- project's own Prettier and .prettierrc when it has them.
+		javascript = { "prettierd" },
+		javascriptreact = { "prettierd" },
+		typescript = { "prettierd" },
+		typescriptreact = { "prettierd" },
 	},
 
 	format_on_save = function(bufnr)

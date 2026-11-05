@@ -15,6 +15,8 @@ vim.lsp.enable({
 	"ty",
 	"ruff",
 	"bashls",
+	"vtsls",
+	"eslint",
 })
 
 local map = vim.keymap.set

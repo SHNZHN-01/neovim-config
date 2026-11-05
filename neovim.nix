@@ -25,6 +25,11 @@
   bash-language-server,
   shellcheck,
   shfmt,
+  # JavaScript/TypeScript
+  vtsls,
+  vscode-langservers-extracted,
+  prettierd,
+  vscode-js-debug,
 }:
 let
   packageName = "neovim-shnzhn";
@@ -49,6 +54,11 @@ let
     bash-language-server
     shellcheck
     shfmt
+    # JavaScript/TypeScript
+    vtsls
+    vscode-langservers-extracted # vscode-eslint-language-server
+    prettierd
+    vscode-js-debug # js-debug
   ];
 
   startPlugins = [
