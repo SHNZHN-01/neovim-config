@@ -1,5 +1,5 @@
 vim.g.mkdp_filetypes = { "markdown" }
-vim.g.mkdp_browser = "firefox"
+vim.g.mkdp_browser = "" -- the system's default browser
 
 vim.keymap.set("n", "<leader>mp", "<cmd>MarkdownPreview<cr>", { desc = "Start Markdown Preview" })
 vim.keymap.set("n", "<leader>mps", "<cmd>MarkdownPreviewStop<cr>", { desc = "Stop Markdown Preview" })

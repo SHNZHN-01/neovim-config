@@ -78,7 +78,7 @@ telescope.setup({
 			prompt_title = false,
 			results_title = false,
 			dynamic_preview_title = false,
-			hidden = hidden,
+			hidden = true, -- dotfiles too (.git/ and node_modules left out below)
 			file_ignore_patterns = {
 				"^.git/",
 				"node_modules",

@@ -31,9 +31,42 @@
   prettierd,
   vscode-js-debug,
   nodejs,
+  # Tools the plugins call, and the debuggers' runtimes
+  stdenv,
+  ripgrep,
+  git,
+  imagemagick,
+  xclip,
+  wl-clipboard,
+  python3,
+  delve,
+  go,
 }:
 let
   packageName = "neovim-shnzhn";
+
+  # The Python debugger's adapter (dap_python.lua): a Python with debugpy.
+  # The program itself runs with the project's Python (its venv, or the
+  # python3 on PATH).
+  debugpyPython = python3.withPackages (ps: [ ps.debugpy ]);
+
+  # Put after the user's PATH, not before: a machine's or project's own
+  # versions win (its git and its config, a dev shell's node or go), these
+  # only fill in where it has none.
+  fallbackDeps = [
+    ripgrep # Telescope's live grep
+    git # git pickers, gitsigns, git-conflict, project_diagnostics
+    imagemagick # image.nvim (magick)
+    nodejs # the program the JS/TS debugger runs (dap_js.lua)
+    debugpyPython # python3 for the Python debugger's program, if none
+    delve # dlv: the Go debugger (dap_go.lua)
+    go # dlv builds the program it debugs
+  ]
+  # the system clipboard (clipboard=unnamedplus) and img-clip: X11, Wayland
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    xclip
+    wl-clipboard
+  ];
 
   runtimeDeps = [
     # Lua
@@ -142,9 +175,7 @@ symlinkJoin {
 
   # wrapProgram moves the real binary to .nvim-wrapped and drops in a
   # shell script that injects flags before any user-supplied args.
-  # Node.js goes after the user's PATH, not before: the program the JS/TS
-  # debugger runs (dap_js.lua) uses the project's own node (a dev shell,
-  # nvm) when there is one, this one otherwise.
+  # The language tools go before the user's PATH, fallbackDeps after it.
   postBuild = ''
     wrapProgram $out/bin/nvim \
       --add-flags '-u' \
@@ -152,7 +183,8 @@ symlinkJoin {
       --add-flags '--cmd' \
       --add-flags "'set packpath^=${packpath} | set runtimepath^=${packpath},${src}'" \
       --prefix PATH : ${lib.makeBinPath runtimeDeps} \
-      --suffix PATH : ${lib.makeBinPath [ nodejs ]} \
+      --suffix PATH : ${lib.makeBinPath fallbackDeps} \
+      --set-default NVIM_SHNZHN_DEBUGPY_PYTHON ${lib.getExe debugpyPython} \
       --set-default NVIM_APPNAME nvim-shnzhn
   '';
 
