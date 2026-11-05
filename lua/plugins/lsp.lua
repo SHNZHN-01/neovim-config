@@ -71,18 +71,20 @@ map("n", "<leader>cS", "<cmd>LspStop<cr>", { desc = "LSP stop" })
 map("n", "<leader>cA", "<cmd>LspStart<cr>", { desc = "LSP start" })
 map("n", "<leader>cK", "<cmd>checkhealth lsp<cr>", { desc = "LSP checkhealth" })
 
-map("n", "<leader>dl", function()
+-- Project-wide diagnostics on <leader>x, apart from the debugger's
+-- <leader>d keys (dap_ui.lua): <leader>dc Continue, <leader>dp Pause.
+map("n", "<leader>xl", function()
 	require("project_diagnostics").lua()
 end, { desc = "Project wide Lua diagnostics" })
 
-map("n", "<leader>dp", function()
+map("n", "<leader>xp", function()
 	require("project_diagnostics").python()
 end, { desc = "Project wide Python diagnostics" })
 
-map("n", "<leader>dn", function()
+map("n", "<leader>xn", function()
 	require("project_diagnostics").nix()
 end, { desc = "Project wide Nix diagnostics" })
 
-map("n", "<leader>dc", function()
+map("n", "<leader>xc", function()
 	require("project_diagnostics").clang_tidy()
 end, { desc = "Project wide clang-tidy diagnostics" })
