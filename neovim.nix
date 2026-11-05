@@ -30,6 +30,7 @@
   vscode-langservers-extracted,
   prettierd,
   vscode-js-debug,
+  nodejs,
 }:
 let
   packageName = "neovim-shnzhn";
@@ -140,7 +141,10 @@ symlinkJoin {
   nativeBuildInputs = [ makeWrapper ];
 
   # wrapProgram moves the real binary to .nvim-wrapped and drops in a
-  # shell script that injects flags before any user-supplied args:
+  # shell script that injects flags before any user-supplied args.
+  # Node.js goes after the user's PATH, not before: the program the JS/TS
+  # debugger runs (dap_js.lua) uses the project's own node (a dev shell,
+  # nvm) when there is one, this one otherwise.
   postBuild = ''
     wrapProgram $out/bin/nvim \
       --add-flags '-u' \
@@ -148,6 +152,7 @@ symlinkJoin {
       --add-flags '--cmd' \
       --add-flags "'set packpath^=${packpath} | set runtimepath^=${packpath},${src}'" \
       --prefix PATH : ${lib.makeBinPath runtimeDeps} \
+      --suffix PATH : ${lib.makeBinPath [ nodejs ]} \
       --set-default NVIM_APPNAME nvim-shnzhn
   '';
 
